@@ -3,6 +3,9 @@
 ---------------------------------------------------------------------------------------
 -- Functions:
 -- drawText(text, x, y, width, fgcolor, bgcolor, fillvalue, fillmax)
+-- drawTextColor(text, x, y, width, bgcolor)
+-- drawBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
+-- drawReverseBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
 -- drawTextBox(text, x, y, width, height, fgcolor, bgcolor, alignment)
 -- drawBox(title, x, y, width, height, fgcolor, bgcolor, boxtype, fillchar)
 -- drawKeyboard(prompt, case)
@@ -13,6 +16,7 @@
 -- font width is 8 pixels, font height is 18 pixels
 -- screen 1280 x 720 pixels
 -- 160 x 40 chars
+
 
 -- Virtual Keyboard Render (41 x 13, max unput length = 39 )
 -- 12345678901234567890123456789012345678901
@@ -46,13 +50,13 @@ local keyboard = {
 }
 
 
-local TEXT_WIDTH = "0---------1---------2---------3---------4---------5---------6---------7---------8---------9---------0---------1---------2---------3---------4---------5---------"
-local TEXT_HEIGHT = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n"
-local TEXT_BLOCKS = "▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▀ ▔ ▏ ▎ ▍ ▌ ▋ ▊ ▉ ▐ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟ ░ ▒ ▓ "
-local TEXT_CIRCLES = "● ○ ◯ ◔ ◕ ◶ ◌ ◉ ◎ ◦ "
-local TEXT_SQUARES = "◆ ◇ ◈ ◊ ■ □ ▪ ▫ ◧ ◨ ◩ ◪ ◫ "
-local TEXT_TRIANGLES = "▲ ▶ ▼ ◀ △ ▷ ▽ ◁ ► ◄ ▻ ◅ ▴ ▸ ▾ ◂ ▵ ▹ ▿ ◃ "
-local TEXT_BOXES = "╦ ╗ ╔ ═ ╩ ╝ ╚ ║ ╬ ╣ ╠ ╥ ╖ ╓ ┰ ┒ ┧ ┎ ┟ ╁ ┯ ┑ ┩ ┍ ┡ ╇ ╤ ╕ ╒ ╍ ╏ ╻ ┳ ┓ ┏ ━ ╸ ╾ ┉ ┋ ╺ ┅ ┇ ╹ ┻ ┛ ╿ ┗ ┃ ╋ ┫ ┣ ╅ ┭ ┵ ┽ ┲ ┺ ╊ ╃ ╮ ╭ ╯ ╰ ╳ ╲ ╱ ╌ ╎ ╷ ┬ ┐ ┌ ─ ╴ ╼ ┈ ┊ ╶ ┄ ┆ ╵ ╽ ┴ ┘ └ │ ┼ ┤ ├ ╆ ┮ ┶ ┾ ┱ ┹ ╉ ╄ ╨ ╜ ╙ ╀ ┸ ┦ ┚ ┞ ┖ ╈ ┷ ┪ ┙ ┢ ┕ ╧ ╛ ╘ ╫ ╢ ╟ ╂ ┨ ┠ ┿ ┥ ┝ ╪ ╡ ╞ "
+TEXT_WIDTH = "0---------1---------2---------3---------4---------5---------6---------7---------8---------9---------0---------1---------2---------3---------4---------5---------"
+TEXT_HEIGHT = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n"
+TEXT_BLOCKS = "▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▀ ▔ ▏ ▎ ▍ ▌ ▋ ▊ ▉ ▐ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟ ░ ▒ ▓ "
+TEXT_CIRCLES = "● ○ ◯ ◔ ◕ ◶ ◌ ◉ ◎ ◦ "
+TEXT_SQUARES = "◆ ◇ ◈ ◊ ■ □ ▪ ▫ ◧ ◨ ◩ ◪ ◫ "
+TEXT_TRIANGLES = "▲ ▶ ▼ ◀ △ ▷ ▽ ◁ ► ◄ ▻ ◅ ▴ ▸ ▾ ◂ ▵ ▹ ▿ ◃ "
+TEXT_BOXES = "╦ ╗ ╔ ═ ╩ ╝ ╚ ║ ╬ ╣ ╠ ╥ ╖ ╓ ┰ ┒ ┧ ┎ ┟ ╁ ┯ ┑ ┩ ┍ ┡ ╇ ╤ ╕ ╒ ╍ ╏ ╻ ┳ ┓ ┏ ━ ╸ ╾ ┉ ┋ ╺ ┅ ┇ ╹ ┻ ┛ ╿ ┗ ┃ ╋ ┫ ┣ ╅ ┭ ┵ ┽ ┲ ┺ ╊ ╃ ╮ ╭ ╯ ╰ ╳ ╲ ╱ ╌ ╎ ╷ ┬ ┐ ┌ ─ ╴ ╼ ┈ ┊ ╶ ┄ ┆ ╵ ╽ ┴ ┘ └ │ ┼ ┤ ├ ╆ ┮ ┶ ┾ ┱ ┹ ╉ ╄ ╨ ╜ ╙ ╀ ┸ ┦ ┚ ┞ ┖ ╈ ┷ ┪ ┙ ┢ ┕ ╧ ╛ ╘ ╫ ╢ ╟ ╂ ┨ ┠ ┿ ┥ ┝ ╪ ╡ ╞ "
 
 FONT = "JetBrainsMonoNL-Regular.ttf"
 FONT_SIZE = 14
@@ -81,14 +85,22 @@ color = {
 	white 			= {   1,   1,   1, 1 },	[15] 			= {   1,   1,   1, 1 },
 	}
 
-
-
 function drawText(text, x, y, width, fgcolor, bgcolor, fillvalue, fillmax)
+
+	-- draw background with text shading
+	local i = 0
+	local bgshading = ""
+	for i = 1,width do
+		bgshading = bgshading .. "░"
+	end
+	love.graphics.setColor( bgcolor )
+	love.graphics.printf(bgshading, x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
 
 	-- draw background's background first with fillmax, half all RGB
 	-- draw background's background using rectangle
-	love.graphics.setColor( bgcolor[1]/2, bgcolor[2]/2, bgcolor[3]/2, bgcolor[4] )
-	love.graphics.rectangle("fill", x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, FONT_HEIGHT)
+--	love.graphics.setColor( bgcolor[1]/2, bgcolor[2]/2, bgcolor[3]/2, bgcolor[4] )
+--	love.graphics.rectangle("fill", x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, FONT_HEIGHT)
+
 	-- draw background's fill based on fillvalue/fillmax
 	-- draw background's fill using thick line
 	love.graphics.setLineWidth( FONT_HEIGHT )
@@ -100,6 +112,180 @@ function drawText(text, x, y, width, fgcolor, bgcolor, fillvalue, fillmax)
 	love.graphics.printf(string.sub(text, 1, width), x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
 
 end -- drawText
+
+
+function drawTextColor(text, x, y, width, bgcolor)
+
+	local i = 0
+	local textLen = 0
+	local codeDetected = false
+	local currentLen = 0 
+
+-- Using CoffeeMud's color codes
+-- ^w :  White            ^W :  Grey           
+-- ^g :  Light green      ^G :  Dark Green
+-- ^b :  Light blue       ^B :  Dark Blue
+-- ^r :  Light red        ^R :  Maroon
+-- ^y :  Yellow           ^Y :  Dark yellow
+-- ^c :  Cyan             ^C :  Dark Cyan
+-- ^p :  Light purple     ^P :  Dark Purple
+
+	-- draw background's background first with fillmax, half all RGB
+	-- draw background's background using rectangle
+	love.graphics.setColor( bgcolor )
+	love.graphics.rectangle("fill", x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, FONT_HEIGHT)
+
+	-- calculate length of string without color codes
+	for i = 1, #text do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if text:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				textLen = textLen + 1
+	    	end
+		end		
+	end
+
+	-- draw colored text up to the declared width
+	for i = 1, #text do
+		if codeDetected == true then
+			-- set color
+			if text:sub(i,i) == "w" then
+				love.graphics.setColor( color.white )
+			elseif text:sub(i,i) == "W" then
+				love.graphics.setColor( color.grey )
+			elseif text:sub(i,i) == "g" then
+				love.graphics.setColor( color.brightgreen )
+			elseif text:sub(i,i) == "G" then
+				love.graphics.setColor( color.green )
+			elseif text:sub(i,i) == "b" then
+				love.graphics.setColor( color.brightblue )
+			elseif text:sub(i,i) == "B" then
+				love.graphics.setColor( color.blue )
+			elseif text:sub(i,i) == "r" then
+				love.graphics.setColor( color.brightred )
+			elseif text:sub(i,i) == "R" then
+				love.graphics.setColor( color.red )
+			elseif text:sub(i,i) == "y" then
+				love.graphics.setColor( color.brightyellow )
+			elseif text:sub(i,i) == "Y" then
+				love.graphics.setColor( color.yellow )
+			elseif text:sub(i,i) == "c" then
+				love.graphics.setColor( color.brightcyan )
+			elseif text:sub(i,i) == "C" then
+				love.graphics.setColor( color.cyan )
+			elseif text:sub(i,i) == "p" then
+				love.graphics.setColor( color.brightmagenta )
+			elseif text:sub(i,i) == "P" then
+				love.graphics.setColor( color.magenta )
+			end
+			codeDetected = false
+		else
+			if text:sub(i,i) == "^" then
+				codeDetected = true
+	    	else
+				currentLen = currentLen + 1 -- current len of chars printed
+				if currentLen <= width then
+					-- only draw if text fits the declared width
+					love.graphics.print(text:sub(i,i), x*FONT_WIDTH + ((currentLen-1)*FONT_WIDTH), y*FONT_HEIGHT)
+				end
+	    	end
+		end		
+	end
+
+end -- drawTextColor
+
+
+-- basic bar with two color transition, decreasing from right to left
+function drawBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
+
+	-- don't go below zero
+	if currentvalue <= 0 then
+		currentvalue = 0
+	end
+	if formervalue <= 0 then
+		formervalue = 0
+	end
+
+	-- draw background with text shading
+	local i = 0
+	local bgshading = ""
+	for i = 1,width do
+		bgshading = bgshading .. "░"
+	end
+	love.graphics.setColor( bgcolor )
+	love.graphics.printf(bgshading, x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+
+	-- draw background's background first with fillmax, half all RGB
+	-- draw background's background using rectangle
+--	love.graphics.setColor( bgcolor[1]/2, bgcolor[2]/2, bgcolor[3]/2, bgcolor[4] )
+--	love.graphics.rectangle("fill", x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, FONT_HEIGHT)
+
+	-- draw background's fill based on fillvalue/fillmax
+	-- draw background's fill using thick line
+	love.graphics.setLineWidth( FONT_HEIGHT )
+	love.graphics.setColor( bgcolor )
+	love.graphics.line(x*FONT_WIDTH, (y*FONT_HEIGHT)+(FONT_HEIGHT/2), (x*FONT_WIDTH)+((width*FONT_WIDTH)*(formervalue/maxvalue)), (y*FONT_HEIGHT)+(FONT_HEIGHT/2))
+
+	-- draw background's fill based on fillvalue/fillmax
+	-- draw background's fill using thick line
+	love.graphics.setLineWidth( FONT_HEIGHT )
+	love.graphics.setColor( fgcolor )
+	love.graphics.line(x*FONT_WIDTH, (y*FONT_HEIGHT)+(FONT_HEIGHT/2), (x*FONT_WIDTH)+((width*FONT_WIDTH)*(currentvalue/maxvalue)), (y*FONT_HEIGHT)+(FONT_HEIGHT/2))
+
+	-- draw foreground text
+	love.graphics.setColor( textcolor )
+	love.graphics.printf(string.sub(text, 1, width), x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+
+end -- drawBar
+
+-- basic bar with two color transition, decreasing from left to right
+function drawReverseBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
+
+	-- don't go below zero
+	if currentvalue <= 0 then
+		currentvalue = 0
+	end
+	if formervalue <= 0 then
+		formervalue = 0
+	end
+
+	-- draw background with text shading
+	local i = 0
+	local bgshading = ""
+	for i = 1,width do
+		bgshading = bgshading .. "░"
+	end
+	love.graphics.setColor( bgcolor )
+	love.graphics.printf(bgshading, x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+
+	-- draw background's background first with fillmax, half all RGB
+	-- draw background's background using rectangle
+--	love.graphics.setColor( bgcolor[1]/2, bgcolor[2]/2, bgcolor[3]/2, bgcolor[4] )
+--	love.graphics.rectangle("fill", x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, FONT_HEIGHT)
+
+	-- draw background's fill based on fillvalue/fillmax
+	-- draw background's fill using thick line
+	love.graphics.setLineWidth( FONT_HEIGHT )
+	love.graphics.setColor( bgcolor )
+	local rightx = (x*FONT_WIDTH)+(width*FONT_WIDTH)
+	love.graphics.line(rightx, (y*FONT_HEIGHT)+(FONT_HEIGHT/2), rightx-((width*FONT_WIDTH)*(formervalue/maxvalue)), (y*FONT_HEIGHT)+(FONT_HEIGHT/2))
+
+	-- draw background's fill based on fillvalue/fillmax
+	-- draw background's fill using thick line
+	love.graphics.setLineWidth( FONT_HEIGHT )
+	love.graphics.setColor( fgcolor )
+	love.graphics.line(rightx, (y*FONT_HEIGHT)+(FONT_HEIGHT/2), rightx-((width*FONT_WIDTH)*(currentvalue/maxvalue)), (y*FONT_HEIGHT)+(FONT_HEIGHT/2))
+
+	-- draw foreground text
+	love.graphics.setColor( color.black )
+	love.graphics.printf(string.sub(text, 1, width), x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'right')
+
+end -- drawReverseBar
 
 
 function drawTextBox(text, x, y, width, height, fgcolor, bgcolor, alignment)
@@ -155,7 +341,7 @@ function drawBox(title, x, y, width, height, fgcolor, bgcolor, boxtype, fillchar
 		bottomLeft = "┗"
 		bottomRight = "┛"
 		horizontal = "━"
-		vertical = "┃"	
+		vertical = "┃"
 	elseif boxtype == "borderless" then
 		topLeft = " "
 		topRight = " "
@@ -196,6 +382,80 @@ function drawBox(title, x, y, width, height, fgcolor, bgcolor, boxtype, fillchar
 		drawText("["..title.."]", x+2, y, string.len(title)+2, fgcolor, bgcolor, 1, 1)
 	end
 end -- drawBox
+
+
+function drawFatBox(title, x, y, width, height, fgcolor, bgcolor)
+
+-- ▄ ▄ ▄ ▄ ▄ ▖
+-- █         ▌
+-- ▐         ▌
+-- ▀ ▀ ▀ ▀ ▀ ▘
+
+	-- draw background using rectangle
+	love.graphics.setColor( bgcolor )
+	love.graphics.rectangle("fill", (x+1)*FONT_WIDTH, (y+1)*FONT_HEIGHT, (width-2)*FONT_WIDTH, (height-2)*FONT_HEIGHT)
+
+	-- draw corners
+	love.graphics.setColor( fgcolor )
+	love.graphics.printf("▄", x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	love.graphics.printf("▀", x*FONT_WIDTH, (y+height-1)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	love.graphics.printf("▄", (x+width-1)*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	love.graphics.printf("▀", (x+width-1)*FONT_WIDTH, (y+height-1)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	-- draw horizontal lines
+	local i = 0
+	for i = 1,width-2 do
+		love.graphics.printf("▄", (x+i)*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+		love.graphics.printf("▀", (x+i)*FONT_WIDTH, (height+y-1)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	end
+	-- draw vertical lines
+	for i = 1,height-2 do
+		love.graphics.printf("█", x*FONT_WIDTH, (y+i)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+		love.graphics.printf("█", (x+width-1)*FONT_WIDTH, (y+i)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	end
+
+	-- draw title if it's not blank
+	if title ~= "" then
+		drawText("["..title.."]", x+2, y, string.len(title)+2, fgcolor, bgcolor, 1, 1)
+	end
+
+end
+
+
+function drawInputTip(text, x, y, framecolor, bgcolor)
+
+-- ▄▄▄▄▄▄▄▄
+-- ████████
+-- ▀▀▀▀▀▀▀▀
+
+	local i = 0
+	local textLen = 0
+
+	-- calculate length of string without color codes
+	for i = 1, #text do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if text:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				textLen = textLen + 1
+	    	end
+		end		
+	end
+
+	love.graphics.setColor( framecolor )
+	for i = 0,textLen+1 do
+		love.graphics.printf("▄", (x+i)*FONT_WIDTH, (y-1)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+		love.graphics.printf("█", (x+i)*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+		love.graphics.printf("▀", (x+i)*FONT_WIDTH, (y+1)*FONT_HEIGHT, width*FONT_WIDTH, 'left')
+	end
+
+	drawTextColor(text, x+1, y, textLen, bgcolor)
+
+end
+
 
 -- virtual keyboard (for console compatibility)
 -- uses global from main.lua : game.keyboard.input
