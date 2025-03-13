@@ -18,40 +18,8 @@
 -- 160 x 40 chars
 
 
--- Virtual Keyboard Render (41 x 13, max unput length = 39 )
--- 12345678901234567890123456789012345678901
-local keyboard = {
-[1] = "╔═══════════════════════════════════════╗",
-[2] = "║                                       ║",
-[3] = "╟───╥───╥───╥───╥───╥───╥───╥───╥───╥───╢",
-[4] = "║ 1 ║ 2 ║ 3 ║ 4 ║ 5 ║ 6 ║ 7 ║ 8 ║ 9 ║ 0 ║",
-[5] = "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
-[6] = "║ q ║ w ║ e ║ r ║ t ║ y ║ u ║ i ║ o ║ p ║",
-[7] = "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
-[8] = "║ - ║ a ║ s ║ d ║ f ║ g ║ h ║ j ║ k ║ l ║",
-[9] = "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╩═══╣",
-[10]= "║ . ║ z ║ x ║ c ║ v ║ b ║ n ║ m ║  del  ║",
-[11]= "╠═══╩═══╩═══╬═══╩═══╩═══╩═══╬═══╩═══════╣",
-[12]= "║ caps lock ║     space     ║   enter   ║",
-[13]= "╚═══════════╩═══════════════╩═══════════╝",
-[14]= "╔═══════════════════════════════════════╗",
-[15]= "║                                       ║",
-[16]= "╟───╥───╥───╥───╥───╥───╥───╥───╥───╥───╢",
-[17]= "║ 1 ║ 2 ║ 3 ║ 4 ║ 5 ║ 6 ║ 7 ║ 8 ║ 9 ║ 0 ║",
-[18]= "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
-[19]= "║ Q ║ W ║ E ║ R ║ T ║ Y ║ U ║ I ║ O ║ P ║",
-[20]= "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
-[21]= "║ - ║ A ║ S ║ D ║ F ║ G ║ H ║ J ║ K ║ L ║",
-[22]= "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╩═══╣",
-[23]= "║ . ║ Z ║ X ║ C ║ V ║ B ║ N ║ M ║  del  ║",
-[24]= "╠═══╩═══╩═══╬═══╩═══╩═══╩═══╬═══╩═══════╣",
-[25]= "║ caps lock ║     space     ║   enter   ║",
-[26]= "╚═══════════╩═══════════════╩═══════════╝"
-}
-
-
 TEXT_WIDTH = "0---------1---------2---------3---------4---------5---------6---------7---------8---------9---------0---------1---------2---------3---------4---------5---------"
-TEXT_HEIGHT = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n"
+TEXT_HEIGHT = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
 TEXT_BLOCKS = "▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▀ ▔ ▏ ▎ ▍ ▌ ▋ ▊ ▉ ▐ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟ ░ ▒ ▓ "
 TEXT_CIRCLES = "● ○ ◯ ◔ ◕ ◶ ◌ ◉ ◎ ◦ "
 TEXT_SQUARES = "◆ ◇ ◈ ◊ ■ □ ▪ ▫ ◧ ◨ ◩ ◪ ◫ "
@@ -85,6 +53,234 @@ color = {
 	white 			= {   1,   1,   1, 1 },	[15] 			= {   1,   1,   1, 1 },
 	}
 
+
+-- Virtual Keyboard Render (41 x 13, max unput length = 39 )
+-- 12345678901234567890123456789012345678901
+local keyboard = {
+[1] = "╔═══════════════════════════════════════╗",
+[2] = "║                                       ║",
+[3] = "╟───╥───╥───╥───╥───╥───╥───╥───╥───╥───╢",
+[4] = "║ 1 ║ 2 ║ 3 ║ 4 ║ 5 ║ 6 ║ 7 ║ 8 ║ 9 ║ 0 ║",
+[5] = "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
+[6] = "║ q ║ w ║ e ║ r ║ t ║ y ║ u ║ i ║ o ║ p ║",
+[7] = "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
+[8] = "║ - ║ a ║ s ║ d ║ f ║ g ║ h ║ j ║ k ║ l ║",
+[9] = "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╩═══╣",
+[10]= "║ . ║ z ║ x ║ c ║ v ║ b ║ n ║ m ║  del  ║",
+[11]= "╠═══╩═══╩═══╬═══╩═══╩═══╩═══╬═══╩═══════╣",
+[12]= "║ caps lock ║     space     ║   enter   ║",
+[13]= "╚═══════════╩═══════════════╩═══════════╝",
+[14]= "╔═══════════════════════════════════════╗",
+[15]= "║                                       ║",
+[16]= "╟───╥───╥───╥───╥───╥───╥───╥───╥───╥───╢",
+[17]= "║ 1 ║ 2 ║ 3 ║ 4 ║ 5 ║ 6 ║ 7 ║ 8 ║ 9 ║ 0 ║",
+[18]= "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
+[19]= "║ Q ║ W ║ E ║ R ║ T ║ Y ║ U ║ I ║ O ║ P ║",
+[20]= "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣",
+[21]= "║ - ║ A ║ S ║ D ║ F ║ G ║ H ║ J ║ K ║ L ║",
+[22]= "╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╩═══╣",
+[23]= "║ . ║ Z ║ X ║ C ║ V ║ B ║ N ║ M ║  del  ║",
+[24]= "╠═══╩═══╩═══╬═══╩═══╩═══╩═══╬═══╩═══════╣",
+[25]= "║ caps lock ║     space     ║   enter   ║",
+[26]= "╚═══════════╩═══════════════╩═══════════╝"
+}
+
+-- lookup table for virtual keyboard ([y][x])
+vkey = {}
+vkey[1] = {
+[1] = "1",
+[2] = "2",
+[3] = "3",
+[4] = "4",
+[5] = "5",
+[6] = "6",
+[7] = "7",
+[8] = "8",
+[9] = "9",
+[10]= "0"
+}
+vkey[2] = {
+[1] = "q",
+[2] = "w",
+[3] = "e",
+[4] = "r",
+[5] = "t",
+[6] = "y",
+[7] = "u",
+[8] = "i",
+[9] = "o",
+[10]= "p"
+}
+vkey[3] = {
+[1] = "-",
+[2] = "a",
+[3] = "s",
+[4] = "d",
+[5] = "f",
+[6] = "g",
+[7] = "h",
+[8] = "j",
+[9] = "k",
+[10]= "l"
+}
+vkey[4] = {
+[1] = ".",
+[2] = "z",
+[3] = "x",
+[4] = "c",
+[5] = "v",
+[6] = "b",
+[7] = "n",
+[8] = "m",
+[9] = "",
+[10]= ""
+}
+vkey[5] = {
+[1] = "",
+[2] = "",
+[3] = "",
+[4] = " ",
+[5] = " ",
+[6] = " ",
+[7] = " ",
+[8] = "",
+[9] = "",
+[10]= ""
+}
+vkey[6] = {
+[1] = "1",
+[2] = "2",
+[3] = "3",
+[4] = "4",
+[5] = "5",
+[6] = "6",
+[7] = "7",
+[8] = "8",
+[9] = "9",
+[10]= "0"
+}
+vkey[7] = {
+[1] = "Q",
+[2] = "W",
+[3] = "E",
+[4] = "R",
+[5] = "T",
+[6] = "Y",
+[7] = "U",
+[8] = "I",
+[9] = "O",
+[10]= "P"
+}
+vkey[8] = {
+[1] = "-",
+[2] = "A",
+[3] = "S",
+[4] = "D",
+[5] = "F",
+[6] = "G",
+[7] = "H",
+[8] = "J",
+[9] = "K",
+[10]= "L"
+}
+vkey[9] = {
+[1] = ".",
+[2] = "Z",
+[3] = "X",
+[4] = "C",
+[5] = "V",
+[6] = "B",
+[7] = "N",
+[8] = "M",
+[9] = "",
+[10]= ""
+}
+vkey[10] = {
+[1] = "",
+[2] = "",
+[3] = "",
+[4] = " ",
+[5] = " ",
+[6] = " ",
+[7] = " ",
+[8] = "",
+[9] = "",
+[10]= ""
+}
+
+
+function inputDefault()
+	function love.keypressed(key, scancode, isrepeat)
+		if key == "return" then
+			fullscreen = not fullscreen
+			love.window.setFullscreen(fullscreen, "exclusive")
+		end
+
+		if key == "escape" then
+			love.event.quit()
+		end
+
+		if key == "a" then
+			local hit = love.math.random(2)
+			if hit == 1 then
+				punch[love.math.random(7)]:play()
+				game.playerone.hpNow = game.playerone.hpNow - love.math.random(10)
+			else
+				punch[love.math.random(7)]:play()
+				game.playertwo.hpNow = game.playertwo.hpNow - love.math.random(10)
+			end
+		end
+	end
+end -- inputDefault()
+
+
+-- this function switching all input methods for keyboard entry
+-- fixed width = 39 (max string length)
+function inputKeyboard()
+
+	local width = 39
+	
+	function love.keypressed(key, scancode, isrepeat)
+		if scancode == "up" and game.keyboard.selecty ~= 1 then
+			game.keyboard.selecty = game.keyboard.selecty - 1
+		elseif scancode == "left" and game.keyboard.selectx ~= 1 then
+			game.keyboard.selectx = game.keyboard.selectx - 1
+		elseif scancode == "down" and game.keyboard.selecty ~= 5 then
+			game.keyboard.selecty = game.keyboard.selecty + 1
+		elseif scancode == "right" and game.keyboard.selectx ~= 10 then
+			game.keyboard.selectx = game.keyboard.selectx + 1
+		end
+
+		-- when return is pressed
+		if scancode == "return" then
+			if game.keyboard.case == "lower" and string.len(game.keyboard.input) < width then
+				game.keyboard.input = game.keyboard.input .. vkey[game.keyboard.selecty][game.keyboard.selectx]
+			elseif game.keyboard.case == "upper" and string.len(game.keyboard.input) < width then
+				game.keyboard.input = game.keyboard.input .. vkey[game.keyboard.selecty+5][game.keyboard.selectx]
+			end
+			if game.keyboard.selecty == 4 and (game.keyboard.selectx == 9 or game.keyboard.selectx == 10) then
+			-- delete entered
+				game.keyboard.input = game.keyboard.input:sub(1, -2)
+			end
+			if game.keyboard.selecty == 5 then
+				if game.keyboard.selectx <= 3 then -- caps lock entered
+					if game.keyboard.case == "lower" then
+						game.keyboard.case = "upper"
+					else
+						game.keyboard.case = "lower"
+					end
+				elseif game.keyboard.selectx <= 7 then -- spacebar entered
+					-- do spacebar stuff
+				else -- return entered
+					game.keyboard.show = false
+					game.keyboard.done = true
+					inputDefault() -- switch input back to default
+				end
+			end		
+		end -- scancode == "return"
+	end
+end -- inputKeyboard()
+
 function drawText(text, x, y, width, fgcolor, bgcolor, fillvalue, fillmax)
 
 	-- draw background with text shading
@@ -113,7 +309,6 @@ function drawText(text, x, y, width, fgcolor, bgcolor, fillvalue, fillmax)
 
 end -- drawText
 
-
 function drawTextColor(text, x, y, width, bgcolor)
 
 	local i = 0
@@ -129,6 +324,7 @@ function drawTextColor(text, x, y, width, bgcolor)
 -- ^y :  Yellow           ^Y :  Dark yellow
 -- ^c :  Cyan             ^C :  Dark Cyan
 -- ^p :  Light purple     ^P :  Dark Purple
+-- ^k :  Black            ^K :  Black
 
 	-- draw background's background first with fillmax, half all RGB
 	-- draw background's background using rectangle
@@ -182,6 +378,10 @@ function drawTextColor(text, x, y, width, bgcolor)
 				love.graphics.setColor( color.brightmagenta )
 			elseif text:sub(i,i) == "P" then
 				love.graphics.setColor( color.magenta )
+			elseif text:sub(i,i) == "k" then
+				love.graphics.setColor( color.black )
+			elseif text:sub(i,i) == "K" then
+				love.graphics.setColor( color.black )
 			end
 			codeDetected = false
 		else
@@ -198,7 +398,6 @@ function drawTextColor(text, x, y, width, bgcolor)
 	end
 
 end -- drawTextColor
-
 
 -- basic bar with two color transition, decreasing from right to left
 function drawBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
@@ -287,7 +486,6 @@ function drawReverseBar(text, x, y, width, currentvalue, formervalue, maxvalue, 
 
 end -- drawReverseBar
 
-
 function drawTextBox(text, x, y, width, height, fgcolor, bgcolor, alignment)
 
 	-- draw background using rectangle
@@ -299,7 +497,6 @@ function drawTextBox(text, x, y, width, height, fgcolor, bgcolor, alignment)
 	love.graphics.printf(text, x*FONT_WIDTH, y*FONT_HEIGHT, width*FONT_WIDTH, alignment)
 
 end -- drawTextBox
-
 
 -- ansi.box("boxtitle", x, y, width, height, fgcolor, bgcolor, type, fill)
 -- type = single, double, rounded, thick, borderless
@@ -383,7 +580,6 @@ function drawBox(title, x, y, width, height, fgcolor, bgcolor, boxtype, fillchar
 	end
 end -- drawBox
 
-
 function drawFatBox(title, x, y, width, height, fgcolor, bgcolor)
 
 -- ▄ ▄ ▄ ▄ ▄ ▖
@@ -418,8 +614,7 @@ function drawFatBox(title, x, y, width, height, fgcolor, bgcolor)
 		drawText("["..title.."]", x+2, y, string.len(title)+2, fgcolor, bgcolor, 1, 1)
 	end
 
-end
-
+end -- drawFatBox
 
 function drawInputTip(text, x, y, framecolor, bgcolor)
 
@@ -454,8 +649,100 @@ function drawInputTip(text, x, y, framecolor, bgcolor)
 
 	drawTextColor(text, x+1, y, textLen, bgcolor)
 
-end
+end -- drawInputTip
 
+function drawDialogBox(title, msg, options, x, y, framecolor, bgcolor)
+
+	local height = 6
+	local width = 0
+	local i = 0
+	local msgLen = 0
+	local optionsLen = 0
+	
+	-- calculate length of string without color codes
+	for i = 1, #msg do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if msg:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				msgLen = msgLen + 1
+	    	end
+		end		
+	end
+
+	-- calculate length of string without color codes
+	for i = 1, #options do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if options:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				optionsLen = optionsLen + 1
+	    	end
+		end		
+	end
+	
+	-- choose the wider string to set dialog box width
+	if msgLen >= optionsLen then
+		width = msgLen+4
+	else
+		width = optionsLen+6
+	end
+
+	drawFatBox(title, x, y, width, height, framecolor, bgcolor)
+	drawTextColor(msg, x+2, y+2, msgLen, bgcolor)
+	drawInputTip(options, x+math.floor((width-optionsLen)/2)-1, y+height-1, framecolor, bgcolor)
+
+end -- drawDialogBox
+
+function drawNoScrollList(title, list, options, x, y, width, framecolor, bgcolor)
+
+	local height = 0
+	local i = 0
+	local optionsLen = 0
+	local item = ""
+
+	-- set the box height based on number of items in the list
+	for _ in pairs(list) do
+		height = height + 1
+	end
+	-- add the buffer space around the list
+	height = height + 5
+
+	-- calculate length of string without color codes
+	for i = 1, #options do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if options:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				optionsLen = optionsLen + 1
+	    	end
+		end		
+	end
+
+	drawFatBox(title, x, y, width, height, framecolor, bgcolor)
+
+	-- draw items in list
+	i = 1
+	for item = 1, #list do
+		drawTextColor(list[item], x+2, y+1+item, width-4, bgcolor)
+	end
+
+	drawInputTip(options, x+math.floor((width-optionsLen)/2)-1, y+height-1, framecolor, bgcolor)
+
+	
+end -- drawNoScrollList
 
 -- virtual keyboard (for console compatibility)
 -- uses global from main.lua : game.keyboard.input
