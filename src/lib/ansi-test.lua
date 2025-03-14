@@ -29,6 +29,16 @@
 -- " O \nLT>\n X "
 
 
+
+	-- set initial values for list testing
+	local testList = {
+		[1] = "^wSome ^ggreen fingers",
+		[2] = "^wA ^rred herring",
+		[3] = "^wFresh ^cice-cream",
+		[4] = "^wRipe ^ybananas",
+		[5] = "^wFragrant ^pgrapes",
+	}
+
 function testLoad()
 	bgm = love.audio.newSource("audio/CyborgNinja.ogg", "static")
 	bgm:play()
@@ -44,10 +54,24 @@ end -- testLoad()
 
 
 function testRun()
+
 	-- sequential commands for testing
-	game.keyboard.show = true
+	game.keyboard.show = false
 	game.keyboard.input = ""
-	inputKeyboard()
+
+	-- set intial input scheme
+--	inputKeyboard()
+	inputDefault()
+	
+	game.list.selected = 1
+	game.list.lastItem = #testList
+	game.list.confirm = false
+
+	local saveTable = json.encode(color)
+	local file = io.open(love.filesystem.getSaveDirectory().."//ui/color.txt", "w")
+	file:write(saveTable)
+	file:close()
+
 end
 
 function testUpdate()
@@ -99,16 +123,13 @@ function testDraw()
 	drawDialogBox("", " ^wAre you ready for ^pL^yO^cV^rE ^cJ^yA^pM ^w2025? ", " ^y[y]^wes  ^y[n]^wo ", 100, 7, color.brightblue, color.blue)
 	drawDialogBox("", " ^rQuit? ", " ^y[y]^wes  ^y[n]^wo ", 100, 20, color.brightblue, color.blue)
 
-	-- drawNoScrollList(title, list, options, x, y, width, framecolor, bgcolor)
-	local testList = {
-		[1] = "^wSome ^ggreen fingers",
-		[2] = "^wA ^rred herring",
-		[3] = "^wFresh ^cice-cream",
-		[4] = "^wRipe ^ybananas",
-		[5] = "^wFragrant ^pgrapes",
-	}
-	
+	-- drawNoScrollList(title, list, options, x, y, width, framecolor, bgcolor)	
 	drawNoScrollList("", testList, " ^y"..#testList.." ^witems ", 60, 9, 25, color.brightblue, color.blue)
+
+	-- drawScrollList(title, list, options, selected, x, y, width, framecolor, bgcolor)
+	drawScrollList("", testList, " ^w[^yUp/Down^w] Change selection ", game.list.selected, 60, 22, 25, color.brightblue, color.blue)
+
+	-- test saving a table in JSON
 
 	-- draw screen guides for width and height text coordinates
 	love.graphics.printf(TEXT_WIDTH, monoFont, 0, 0, game.width, "left")

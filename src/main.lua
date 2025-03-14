@@ -9,9 +9,9 @@
 
 love.filesystem.setIdentity("love-ansi") -- for R36S file system compatibility
 
-require "lib.ansi" -- love-ansi main library
-require "lib.ansi-test" -- love-ansi test suite
-
+json = require "lib.json"	-- encode / decode table to JSON
+require "lib.ansi"			-- love-ansi main library
+require "lib.ansi-test"		-- love-ansi test suite
 
 -- define global variables used in all scenes
 
@@ -25,6 +25,46 @@ width, height = love.graphics.getDimensions( )
 game.width = width
 game.height = height
 
+-- create default directories
+if love.filesystem.getUserDirectory( ) == "/home/ark/" then
+	game.system = "R36S"
+	-- user LUA I/O to write
+	os.execute("mkdir " .. love.filesystem.getSaveDirectory()) -- OS creation
+	os.execute("mkdir " .. love.filesystem.getSaveDirectory() .. "//ui")
+	os.execute("mkdir " .. love.filesystem.getSaveDirectory() .. "//ui/default")
+	os.execute("mkdir " .. love.filesystem.getSaveDirectory() .. "//autosaves")
+
+else
+	game.system = "Others"
+	love.filesystem.createDirectory("ui")
+	love.filesystem.createDirectory("ui/default")
+	love.filesystem.createDirectory("autosaves")	
+end
+
+
+function restoreMainDefaults()
+	
+	-- use this function to restore default values
+	
+end
+
+
+-- load autosaves
+	if love.filesystem.getInfo( "game-time.txt" ) == nil then -- first run of game
+		-- create files for the first time
+		game.time = 0
+		local f = io.open(love.filesystem.getSaveDirectory().."//game-time.txt", "w+")
+		f:write(game.time)
+		f:close()
+	
+		restoreMainDefaults() -- create defaults for the first time
+		
+	else
+		-- read existing files
+		game.time = love.filesystem.read("game-time.txt")
+	end
+-- end : load autosaves
+
 -- requires lib.ansi
 game.keyboard = {
 	show = false,
@@ -34,6 +74,13 @@ game.keyboard = {
 	input = "",
 	selectx = 1,
 	selecty = 1,
+}
+
+-- requires lib.ansi
+game.list = {
+	selected = 1, 		-- index number of selected item
+	lastItem = 1,		-- index number of last item on list
+	confirm = false, 	-- state of list window
 }
 
 game.playerone = {

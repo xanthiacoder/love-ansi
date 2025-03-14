@@ -31,7 +31,7 @@ FONT_SIZE = 14
 FONT_WIDTH = 8
 FONT_HEIGHT = 18
 
---	eg. 	love.graphics.setColor( color.white ) or color[0..15]
+--[[	eg. 	love.graphics.setColor( color.white ) or color[0..15]
 color = {
 	black 			= {   0,   0,   0, 1 }, [0] 			= {   0,   0,   0, 1 },
 	red 			= { 0.5,   0,   0, 1 },	[1] 			= { 0.5,   0,   0, 1 },
@@ -52,6 +52,52 @@ color = {
 	brightcyan 		= {   0,   1,   1, 1 },	[14]	 		= {   0,   1,   1, 1 },
 	white 			= {   1,   1,   1, 1 },	[15] 			= {   1,   1,   1, 1 },
 	}
+]]--
+
+function restoreAnsiDefaults()
+	-- use this to restore ansi defaults
+
+	--	eg. 	love.graphics.setColor( color.white )
+	color = {
+		black 			= {   0,   0,   0, 1 },
+		red 			= { 0.5,   0,   0, 1 },
+		green 			= {   0, 0.5,   0, 1 },
+		yellow 			= { 0.5, 0.5,   0, 1 },
+		blue 			= {   0,   0, 0.5, 1 },
+		magenta			= { 0.5,   0, 0.5, 1 },
+		cyan 			= {   0, 0.5, 0.5, 1 },
+		gray	 		= { 0.7, 0.7, 0.7, 1 },
+		grey	 		= { 0.7, 0.7, 0.7, 1 },
+		darkgray		= { 0.5, 0.5, 0.5, 1 },
+		darkgrey		= { 0.5, 0.5, 0.5, 1 },
+		brightred		= {   1,   0,   0, 1 },
+		brightgreen		= {   0,   1,   0, 1 },
+		brightyellow 	= {   1,   1,   0, 1 },
+		brightblue 		= {   0,   0,   1, 1 },
+		brightmagenta 	= {   1,   0,   1, 1 },
+		brightcyan 		= {   0,   1,   1, 1 },
+		white 			= {   1,   1,   1, 1 },
+	}
+
+end
+
+-- load saved ansi files
+if love.filesystem.getInfo( "ui/color.txt" ) == nil then -- no color file
+
+	restoreAnsiDefaults() -- create defaults for the first time
+
+	-- create files for the first time
+	local f = io.open(love.filesystem.getSaveDirectory().."//ui/color.txt", "w+")
+	f:write(json.encode(color))
+	f:close()
+	
+else
+	-- read existing ansi files
+	local colorstring = love.filesystem.read("//ui/color.txt")
+	color = json.decode(colorstring)
+	
+end -- load autosaves
+
 
 
 -- Virtual Keyboard Render (41 x 13, max unput length = 39 )
@@ -220,6 +266,7 @@ function inputDefault()
 			love.event.quit()
 		end
 
+		-- for testing HP bars
 		if key == "a" then
 			local hit = love.math.random(2)
 			if hit == 1 then
@@ -229,6 +276,14 @@ function inputDefault()
 				punch[love.math.random(7)]:play()
 				game.playertwo.hpNow = game.playertwo.hpNow - love.math.random(10)
 			end
+		end
+
+		-- for testing Scroll List
+		if key == "up" and (game.list.selected-1) ~= 0 then -- don't go below 1
+			game.list.selected = game.list.selected - 1
+		end
+		if key == "down" and game.list.selected < game.list.lastItem then -- don't past last item
+			game.list.selected = game.list.selected + 1
 		end
 	end
 end -- inputDefault()
@@ -344,6 +399,10 @@ function drawTextColor(text, x, y, width, bgcolor)
 				textLen = textLen + 1
 	    	end
 		end		
+	end
+
+	if textLen == #text then -- no color codes detected
+		text = "^w"..text	-- add default white color
 	end
 
 	-- draw colored text up to the declared width
@@ -741,8 +800,61 @@ function drawNoScrollList(title, list, options, x, y, width, framecolor, bgcolor
 
 	drawInputTip(options, x+math.floor((width-optionsLen)/2)-1, y+height-1, framecolor, bgcolor)
 
-	
 end -- drawNoScrollList
+
+function drawScrollList(title, list, options, selected, x, y, width, framecolor, bgcolor)
+
+	local height = 6 -- fixed height to show only 1 selection from list
+	local i = 0
+	local optionsLen = 0
+	local item = ""
+	local statusBar = " ^w[^y"..selected.."^w/"..#list.."] "..options
+	local statusLen = 0
+
+	-- calculate length of options without color codes
+	for i = 1, #options do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if options:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				optionsLen = optionsLen + 1
+	    	end
+		end		
+	end
+
+	-- calculate length of statusBar without color codes
+	for i = 1, #statusBar do
+		if codeDetected == true then
+			-- skip this char
+			codeDetected = false
+		else
+			if statusBar:sub(i,i) == "^" then
+				codeDetected = true
+				-- don't count char
+	    	else
+				statusLen = statusLen + 1
+	    	end
+		end		
+	end
+
+	-- change width if statusBar is longer
+	if statusLen > width then
+		drawFatBox(title, x, y, statusLen+2, height, framecolor, bgcolor)
+		drawInputTip(statusBar, x, y+height-1, framecolor, bgcolor)
+	else
+		drawFatBox(title, x, y, width, height, framecolor, bgcolor)
+		drawInputTip(statusBar, x+math.floor((width-optionsLen)/2)-1, y+height-1, framecolor, bgcolor)
+	end
+
+	-- draw only selected item in list
+	drawTextColor(list[selected], x+2, y+2, width-4, bgcolor)
+
+end -- drawScrollList
+
 
 -- virtual keyboard (for console compatibility)
 -- uses global from main.lua : game.keyboard.input
