@@ -1,15 +1,6 @@
--- testing suite for love-ansi.lua by joash chee to emulate ANSI
+-- all the different inputs for each scene, in functions
 
----------------------------------------------------------------------------------------
--- Functions:
--- drawText(text, x, y, width, fgcolor, bgcolor, fillvalue, fillmax)
--- drawTextColor(text, x, y, width, bgcolor)
--- drawBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
--- drawReverseBar(text, x, y, width, currentvalue, formervalue, maxvalue, fgcolor, bgcolor, textcolor)
--- drawTextBox(text, x, y, width, height, fgcolor, bgcolor, alignment)
--- drawBox(title, x, y, width, height, fgcolor, bgcolor, boxtype, fillchar)
--- drawKeyboard(prompt, case)
----------------------------------------------------------------------------------------
+-- testing suite for love-ansi.lua by joash chee to emulate ANSI
 
 -- monotype font is JetBrainsMonoNL-Regular.ttf
 -- font size is 14pt
@@ -29,8 +20,7 @@
 -- " O \nLT>\n X "
 
 
-
-	-- set initial values for list testing
+-- local data here
 	local testList = {
 		[1] = "^wSome ^ggreen fingers",
 		[2] = "^wA ^rred herring",
@@ -39,7 +29,9 @@
 		[5] = "^wFragrant ^pgrapes",
 	}
 
-function testLoad()
+
+function titleLoad()
+	-- all the one-time things that need to load for title scene
 	bgm = love.audio.newSource("audio/CyborgNinja.ogg", "static")
 	bgm:play()
 	punch = {}
@@ -50,31 +42,56 @@ function testLoad()
 	punch[5] = love.audio.newSource("audio/punch5.ogg", "static")
 	punch[6] = love.audio.newSource("audio/punch6.wav", "static")
 	punch[7] = love.audio.newSource("audio/punch7.wav", "static")
-end -- testLoad()
+end -- titleLoad()
 
 
-function testRun()
+function titleInput()
+	-- this scene's input mapping
+
+	function love.keypressed(key, scancode, isrepeat)
+		if key == "return" then
+			fullscreen = not fullscreen
+			love.window.setFullscreen(fullscreen, "exclusive")
+		end
+
+		if key == "escape" then
+			love.event.quit()
+		end
+
+		-- for testing HP bars
+		if key == "a" then
+			local hit = love.math.random(2)
+			if hit == 1 then
+				punch[love.math.random(7)]:play()
+				game.playerone.hpNow = game.playerone.hpNow - love.math.random(10)
+			else
+				punch[love.math.random(7)]:play()
+				game.playertwo.hpNow = game.playertwo.hpNow - love.math.random(10)
+			end
+		end
+
+		-- for testing Scroll List
+		if key == "up" and (game.list.selected-1) ~= 0 then -- don't go below 1
+			game.list.selected = game.list.selected - 1
+		end
+		if key == "down" and game.list.selected < game.list.lastItem then -- don't past last item
+			game.list.selected = game.list.selected + 1
+		end
+	end
+end -- titleInput
+
+function titleRun()
+	-- anything to run on scene load
 
 	-- sequential commands for testing
 	game.keyboard.show = false
 	game.keyboard.input = ""
 
-	-- set intial input scheme
---	inputKeyboard()
-	inputDefault()
+end -- titleRun
+
+function titleUpdate()
+	-- this scene's updates
 	
-	game.list.selected = 1
-	game.list.lastItem = #testList
-	game.list.confirm = false
-
-	local saveTable = json.encode(color)
-	local file = io.open(love.filesystem.getSaveDirectory().."//ui/color.txt", "w")
-	file:write(saveTable)
-	file:close()
-
-end
-
-function testUpdate()
 	-- HP bar transition effects
 	if game.playerone.hpBefore > game.playerone.hpNow then
 		game.playerone.hpBefore = game.playerone.hpBefore - 0.5
@@ -82,9 +99,11 @@ function testUpdate()
 	if game.playertwo.hpBefore > game.playertwo.hpNow then
 		game.playertwo.hpBefore = game.playertwo.hpBefore - 0.5
 	end
-end
 
-function testDraw()
+end -- titleUpdate
+
+function titleDraw()
+	-- this scene's draws
 
 	-- fill full window with background color
 	love.graphics.setColor( color.darkgrey )
@@ -135,4 +154,4 @@ function testDraw()
 	love.graphics.printf(TEXT_WIDTH, monoFont, 0, 0, game.width, "left")
 	love.graphics.printf(TEXT_HEIGHT, monoFont, 0, 0, game.width, "left")
 
-end -- testDraw()
+end -- titleDraw

@@ -1,0 +1,128 @@
+-- all the different inputs for each scene, in functions
+
+-- local data here
+
+	local colorList = {
+		[1] = "red",
+		[2] = "green",
+		[3] = "yellow",
+		[4] = "blue",
+		[5] = "magenta",
+		[6] = "cyan",
+		[7] = "dark grey",
+		[8] = "grey",
+		[9] = "bright red",
+		[10] = "bright green",
+		[11] = "bright yellow",
+		[12] = "bright blue",
+		[13] = "bright magenta",
+		[14] = "bright cyan",
+		[15] = "white",
+	}
+
+	local selectedColor = 1
+
+
+
+function settingsLoad()
+	-- all the one-time things that need to load for title scene
+end -- titleLoad()
+
+
+function settingsInput()
+	-- this scene's input mapping
+	function love.keypressed(key, scancode, isrepeat)
+		if key == "return" then
+			fullscreen = not fullscreen
+			love.window.setFullscreen(fullscreen, "exclusive")
+		end
+
+		if key == "escape" then
+			love.event.quit()
+		end
+
+		-- for testing HP bars
+		if key == "a" then
+			local hit = love.math.random(2)
+			if hit == 1 then
+				punch[love.math.random(7)]:play()
+				game.playerone.hpNow = game.playerone.hpNow - love.math.random(10)
+			else
+				punch[love.math.random(7)]:play()
+				game.playertwo.hpNow = game.playertwo.hpNow - love.math.random(10)
+			end
+		end
+
+		-- for switching scenes
+		if key == "1" then
+			game.scene = "title"
+			titleInput()
+			titleRun()
+		end
+		if key == "2" then
+			game.scene = "settings"
+			settingsInput()
+			settingsRun()
+		end
+		if key == "3" then
+			game.scene = "credits"
+			creditsInput()
+			creditsRun()
+		end
+		if key == "4" then
+			game.scene = "quit"
+			quitInput()
+			quitRun()
+		end
+
+		-- for testing Scroll List
+		if key == "up" and (selectedColor-1) ~= 0 then -- don't go below 1
+			selectedColor = selectedColor - 1
+		end
+		if key == "down" and selectedColor < #colorList then -- don't past last item
+			selectedColor = selectedColor + 1
+		end
+	end
+end -- titleInput
+
+function settingsRun()
+	-- anything to run on scene load
+end -- titleRun
+
+function settingsUpdate()
+	-- this scene's updates
+	
+end -- titleUpdate
+
+function settingsDraw()
+	-- this scene's draws
+
+	-- fill full window with background color
+	love.graphics.setColor( color.darkgrey )
+	love.graphics.rectangle("fill", 0, 0, width, height)
+
+	local text = "\nSETTINGS SCENE\n\nThis is the settings scene. Lots of knobs and dials here.\n"
+	drawTextBox(text, 0, 0, 40, 6, color.brightmagenta, color.blue, "center")
+
+	-- drawScrollList(title, list, options, selected, x, y, width, framecolor, bgcolor)
+	drawScrollList("", colorList, "[UP/DOWN] Select color ", selectedColor, 65, 24, 20, color.brightblue, color.blue)
+
+
+	-- display all text colors
+	-- drawTextColor(text, x, y, width, bgcolor) test
+	drawTextColor(" ^Rred ", 			65, 10, 20, color.black)
+	drawTextColor(" ^Ggreen ", 			65, 11, 20, color.black)
+	drawTextColor(" ^Yyellow ", 		65, 12, 20, color.black)
+	drawTextColor(" ^Bblue ", 			65, 13, 20, color.black)
+	drawTextColor(" ^Pmagenta ", 		65, 14, 20, color.black)
+	drawTextColor(" ^Ccyan ", 			65, 15, 20, color.black)
+	drawTextColor(" ^Wdark grey ", 		65, 16, 20, color.black)
+	drawTextColor(" ^rbright red ", 	65, 17, 20, color.black)
+	drawTextColor(" ^gbright green ", 	65, 18, 20, color.black)
+	drawTextColor(" ^ybright yellow ", 	65, 19, 20, color.black)
+	drawTextColor(" ^bbright blue ", 	65, 20, 20, color.black)
+	drawTextColor(" ^pbright magenta ", 65, 21, 20, color.black)
+	drawTextColor(" ^cbright cyan ", 	65, 22, 20, color.black)
+	drawTextColor(" ^wwhite ", 			65, 23, 20, color.black)
+
+end -- titleDraw

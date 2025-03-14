@@ -11,7 +11,12 @@ love.filesystem.setIdentity("love-ansi") -- for R36S file system compatibility
 
 json = require "lib.json"	-- encode / decode table to JSON
 require "lib.ansi"			-- love-ansi main library
-require "lib.ansi-test"		-- love-ansi test suite
+
+-- require all the scene files here
+require "scenes.title"
+require "scenes.settings"
+require "scenes.credits"
+require "scenes.quit"
 
 -- define global variables used in all scenes
 
@@ -102,15 +107,17 @@ function love.load()
 	love.graphics.setFont( monoFont )
 	love.graphics.setColor( color.brightcyan )
 	game.tooltip = game.tooltip .. monoFont:getHeight() .. " height in px"
-	
-	-- test suite (remove when not testing) from lib.ansi-test
-	testLoad()
+
+	-- load all scenes	
+	titleLoad()
 
 end
 
 
--- test suite (remove when not testing) from lib.ansi-test
-testRun()
+-- run the first scene (title)
+game.scene = "title" -- sets the first scene
+titleInput()
+titleRun()
 
 
 -- callback for graceful exit
@@ -122,17 +129,34 @@ end
 -- to make game state changes frame-to-frame
 function love.update(dt)
 
-	-- test suite (to remove) from lib.ansi-test
-	testUpdate()
+	-- run current scene's updates
+	if game.scene == "title" then
+		titleUpdate()
+	elseif game.scene == "settings" then
+		settingsUpdate()
+	elseif game.scene == "credits" then
+		creditsUpdate()
+	elseif game.scene == "quit" then
+		quitUpdate()
+	end
+	
 	
 end
 
 -- to render game state onto the screen, 60 fps
 function love.draw()
 
-	-- test suite (remove when using template) from lib.ansi-test
-	testDraw()
-	
+	-- display current scene
+	if game.scene == "title" then
+		titleDraw()
+	elseif game.scene == "settings" then
+		settingsDraw()
+	elseif game.scene == "credits" then
+		creditsDraw()
+	elseif game.scene == "quit" then
+		quitDraw()
+	end
+
 	-- show / hide virtual keyboard
 	if game.keyboard.show then
 		drawKeyboard(game.keyboard.prompt, game.keyboard.case)

@@ -255,39 +255,6 @@ vkey[10] = {
 }
 
 
-function inputDefault()
-	function love.keypressed(key, scancode, isrepeat)
-		if key == "return" then
-			fullscreen = not fullscreen
-			love.window.setFullscreen(fullscreen, "exclusive")
-		end
-
-		if key == "escape" then
-			love.event.quit()
-		end
-
-		-- for testing HP bars
-		if key == "a" then
-			local hit = love.math.random(2)
-			if hit == 1 then
-				punch[love.math.random(7)]:play()
-				game.playerone.hpNow = game.playerone.hpNow - love.math.random(10)
-			else
-				punch[love.math.random(7)]:play()
-				game.playertwo.hpNow = game.playertwo.hpNow - love.math.random(10)
-			end
-		end
-
-		-- for testing Scroll List
-		if key == "up" and (game.list.selected-1) ~= 0 then -- don't go below 1
-			game.list.selected = game.list.selected - 1
-		end
-		if key == "down" and game.list.selected < game.list.lastItem then -- don't past last item
-			game.list.selected = game.list.selected + 1
-		end
-	end
-end -- inputDefault()
-
 
 -- this function switching all input methods for keyboard entry
 -- fixed width = 39 (max string length)
@@ -412,7 +379,7 @@ function drawTextColor(text, x, y, width, bgcolor)
 			if text:sub(i,i) == "w" then
 				love.graphics.setColor( color.white )
 			elseif text:sub(i,i) == "W" then
-				love.graphics.setColor( color.grey )
+				love.graphics.setColor( color.darkgrey )
 			elseif text:sub(i,i) == "g" then
 				love.graphics.setColor( color.brightgreen )
 			elseif text:sub(i,i) == "G" then
@@ -670,6 +637,7 @@ function drawFatBox(title, x, y, width, height, fgcolor, bgcolor)
 
 	-- draw title if it's not blank
 	if title ~= "" then
+		love.graphics.setColor( fgcolor )
 		drawText("["..title.."]", x+2, y, string.len(title)+2, fgcolor, bgcolor, 1, 1)
 	end
 
@@ -808,7 +776,16 @@ function drawScrollList(title, list, options, selected, x, y, width, framecolor,
 	local i = 0
 	local optionsLen = 0
 	local item = ""
-	local statusBar = " ^w[^y"..selected.."^w/"..#list.."] "..options
+--	local statusBar = " ^w[^y"..selected.."^w/"..#list.."] "..options
+	-- format numbers
+	local statusBar = ""
+	if #list < 10 then
+		statusBar = string.format(" ^w[^y%1d^w/%1d] "..options, selected, #list)
+	elseif #list < 100 then
+		statusBar = string.format(" ^w[^y%02d^w/%02d] "..options, selected, #list)
+	elseif #list < 1000 then
+		statusBar = string.format(" ^w[^y%03d^w/%03d] "..options, selected, #list)
+	end	
 	local statusLen = 0
 
 	-- calculate length of options without color codes
