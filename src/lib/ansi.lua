@@ -31,6 +31,32 @@ FONT_SIZE = 14
 FONT_WIDTH = 8
 FONT_HEIGHT = 18
 
+--[[ ASCII Diagram for R36S Input Controls
+
+
+123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|
+2
+3
+4         l            x            y            r
+5      [ L 1 ]      [ L 2 ]      [ R 2 ]      [ R 1 ]
+6     -------------------------------------------------
+7
+8         w                                   space
+9        |^|                                   (X)
+-     a[<   >]d                            b(Y)   (A)z
+1        |v|                                   (B)
+2         s                                  lshift
+3                   [select]  [ start ]
+4                     esc      return
+5        up                                  mouse up
+6       x^^^x                                 x^^^x
+7  left( (@) )right                     mouse( (@) )mouse
+8       x___x                           left  x___x right
+9       down                                  mouse
+-                                             down
+
+]]
+
 --[[	eg. 	love.graphics.setColor( color.white ) or color[0..15]
 color = {
 	black 			= {   0,   0,   0, 1 }, [0] 			= {   0,   0,   0, 1 },
